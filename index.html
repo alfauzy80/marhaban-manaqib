@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Marhaban & Manaqib — Kitab Digital</title>
 
+<!-- PWA Meta Tags -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B3D2E">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBCM0QyRSIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1zaXplPSIzMCIgZmlsbD0iI0M5QTg0QyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNlcmlmIj5NJmFtcDtNPC90ZXh0Pjwvc3ZnPg==">
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
@@ -356,9 +361,6 @@
     border-radius: 0.5rem;
   }
 
-  /* ============================================================
-     TOAST NOTIFIKASI (PENCET SAKALI DEUI)
-     ============================================================ */
   .toast-msg {
     position: fixed;
     bottom: -100px;
@@ -388,7 +390,6 @@
 
 <body class="geometric-bg text-[#F5F0E8]">
 
-<!-- TOAST NOTIFIKASI -->
 <div id="toast-msg" class="toast-msg">pencet sakali deui bisi arek kaluar mah</div>
 
 <div id="light-trail-layer"></div>
@@ -961,6 +962,21 @@
 
 <script>
   /* ============================================================
+     REGISTER SERVICE WORKER (PWA)
+     ============================================================ */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(registration => {
+          console.log('ServiceWorker registered with scope:', registration.scope);
+        })
+        .catch(error => {
+          console.log('ServiceWorker registration failed:', error);
+        });
+    });
+  }
+
+  /* ============================================================
      0. FUNGSI HAPUS CACHE (Broom Icon)
      ============================================================ */
   async function clearAppCache() {
@@ -1051,7 +1067,6 @@
       
       document.getElementById('scroll-to-top').classList.remove('show');
 
-      // Push History API jika bukan dari tombol back
       if (pushHistory) {
         history.pushState({ page: pageId }, '', window.location.href);
       }
@@ -1313,7 +1328,6 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     loadEdits();
-    // Inisialisasi state history awal
     history.replaceState({ page: 'page-cover' }, '', window.location.href);
   });
 
@@ -1322,17 +1336,13 @@
     const state = event.state;
 
     if (currentView === 'page-cover') {
-      // Berada di cover
       if (exitPressedOnce) {
-        // Jika sudah pencet sekali, biarkan browser keluar (return)
         return;
       }
       
-      // Pencetan pertama, munculkan toast dan cegah keluar
       exitPressedOnce = true;
       showToast("pencet sakali deui bisi arek kaluar mah");
       
-      // Tambahkan history barrier lagi
       history.pushState({ page: 'page-cover' }, '', window.location.href);
       
       clearTimeout(exitTimeout);
@@ -1341,15 +1351,13 @@
       }, 2000);
       
     } else {
-      // Berada di halaman bab/daftar isi
       if (state && state.page) {
-        goTo(state.page, false); // Mundur ke halaman sebelumnya tanpa push history baru
+        goTo(state.page, false); 
       } else {
-        goTo('page-cover', false); // Fallback
+        goTo('page-cover', false); 
       }
     }
   });
-
 </script>
 
 </body>
