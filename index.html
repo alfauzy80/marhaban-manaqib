@@ -355,10 +355,41 @@
     padding: 1rem;
     border-radius: 0.5rem;
   }
+
+  /* ============================================================
+     TOAST NOTIFIKASI (PENCET SAKALI DEUI)
+     ============================================================ */
+  .toast-msg {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(11, 61, 46, 0.95);
+    border: 1px solid #C9A84C;
+    color: #F5F0E8;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 15px rgba(201, 168, 76, 0.3);
+    transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10000;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    font-weight: 500;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast-msg.show {
+    bottom: 90px;
+  }
 </style>
 </head>
 
 <body class="geometric-bg text-[#F5F0E8]">
+
+<!-- TOAST NOTIFIKASI -->
+<div id="toast-msg" class="toast-msg">pencet sakali deui bisi arek kaluar mah</div>
 
 <div id="light-trail-layer"></div>
 
@@ -997,7 +1028,7 @@
      ============================================================ */
   const readerControls = document.getElementById('reader-controls');
 
-  function goTo(pageId) {
+  function goTo(pageId, pushHistory = true) {
     if (window.speechSynthesis && window.speechSynthesis.speaking) {
       window.speechSynthesis.cancel();
       document.getElementById('playBtn').innerHTML = '▶';
@@ -1019,6 +1050,11 @@
       }
       
       document.getElementById('scroll-to-top').classList.remove('show');
+
+      // Push History API jika bukan dari tombol back
+      if (pushHistory) {
+        history.pushState({ page: pageId }, '', window.location.href);
+      }
     }
   }
 
@@ -1053,19 +1089,16 @@
     
     if (arabicVoices.length === 0) return { voice: null, isMale: false };
 
-    // 1. Cari berdasarkan nama pria yang umum
     const maleKeywords = /maged|tarik|hamza|naayf|khalid|shakir|bassel|majed|male|pria/i;
     let maleVoice = arabicVoices.find(v => maleKeywords.test(v.name));
     
     if (maleVoice) return { voice: maleVoice, isMale: true };
 
-    // 2. Jika tidak ada nama pria, hindari nama wanita yang umum
     const femaleKeywords = /hoda|salma|laila|zeina|mariam|female|wanita|perempuan/i;
     let nonFemaleVoice = arabicVoices.find(v => !femaleKeywords.test(v.name));
     
     if (nonFemaleVoice) return { voice: nonFemaleVoice, isMale: false };
 
-    // 3. Jika terpaksa, ambil suara Arab pertama
     return { voice: arabicVoices[0], isMale: false };
   }
 
@@ -1085,8 +1118,6 @@
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'ar-SA';
-    
-    // Intonasi natural (jeda, kecepatan)
     utterance.rate = 0.85; 
 
     const { voice, isMale } = getBestArabicVoice();
@@ -1094,11 +1125,10 @@
       utterance.voice = voice;
     }
 
-    // Jika bukan suara pria (karena tidak ketemu), paksa nada suara jadi berat (maskulin)
     if (!isMale) {
-      utterance.pitch = 0.5; // Nada sangat rendah agar mirip pria
+      utterance.pitch = 0.5;
     } else {
-      utterance.pitch = 0.9; // Nada normal pria
+      utterance.pitch = 0.9;
     }
 
     utterance.onend = () => {
@@ -1137,18 +1167,15 @@
 
     if (!activeContent) return;
 
-    // Cek daftar suara
     const voices = synth.getVoices();
     const arabicVoices = voices.filter(v => v.lang.toLowerCase().includes('ar'));
 
-    // DEBUG: Jika tidak ada suara Arab sama sekali
     if (arabicVoices.length === 0) {
       let allVoiceNames = voices.map(v => v.name + " (" + v.lang + ")").join("\n");
       alert("Sistem tidak menemukan suara bahasa Arab sama sekali di browser.\n\nDaftar suara yang terdeteksi:\n" + allVoiceNames + "\n\nPastikan Anda sudah menginstal bahasa Arab di HP, lalu klik tombol Sapu (Hapus Cache) di halaman cover, dan muat ulang.");
       return;
     }
 
-    // Pembersihan teks
     let rawText = activeContent.innerText;
     let cleanText = rawText.replace(/Imam/g, '').replace(/Ma'mum/g, '').replace(/Bersama imam & ma'mum/g, '');
     cleanText = cleanText.replace(/۞/g, '. ').replace(/◌/g, '. ');
@@ -1161,17 +1188,14 @@
     isReading = true;
     playBtn.innerHTML = '⏳';
 
-    // LANGSUNG PUTAR TANPA SETTIMEOUT (Mencegah pemblokiran browser)
     playBtn.innerHTML = '⏸';
     playNextChunk();
   }
 
-  // Pastikan suara dimuat saat halaman dibuka
   window.speechSynthesis.onvoiceschanged = () => {
     window.speechSynthesis.getVoices();
   };
   
-  // Pancing pemuatan suara di awal
   window.speechSynthesis.getVoices();
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && lightsWrapper) {
@@ -1272,7 +1296,59 @@
     }
   }
 
-  window.addEventListener('DOMContentLoaded', loadEdits);
+  /* ============================================================
+     7. LOGIKA TOMBOL BACK (HISTORY API) & TOAST
+     ============================================================ */
+  let exitPressedOnce = false;
+  let exitTimeout;
+
+  function showToast(message) {
+    const toast = document.getElementById('toast-msg');
+    toast.innerText = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2000);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    loadEdits();
+    // Inisialisasi state history awal
+    history.replaceState({ page: 'page-cover' }, '', window.location.href);
+  });
+
+  window.addEventListener('popstate', function(event) {
+    const currentView = document.querySelector('.page.active').id;
+    const state = event.state;
+
+    if (currentView === 'page-cover') {
+      // Berada di cover
+      if (exitPressedOnce) {
+        // Jika sudah pencet sekali, biarkan browser keluar (return)
+        return;
+      }
+      
+      // Pencetan pertama, munculkan toast dan cegah keluar
+      exitPressedOnce = true;
+      showToast("pencet sakali deui bisi arek kaluar mah");
+      
+      // Tambahkan history barrier lagi
+      history.pushState({ page: 'page-cover' }, '', window.location.href);
+      
+      clearTimeout(exitTimeout);
+      exitTimeout = setTimeout(() => {
+        exitPressedOnce = false;
+      }, 2000);
+      
+    } else {
+      // Berada di halaman bab/daftar isi
+      if (state && state.page) {
+        goTo(state.page, false); // Mundur ke halaman sebelumnya tanpa push history baru
+      } else {
+        goTo('page-cover', false); // Fallback
+      }
+    }
+  });
 
 </script>
 
