@@ -8,7 +8,9 @@
 <!-- PWA Meta Tags -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0B3D2E">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBCM0QyRSIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1zaXplPSIzMCIgZmlsbD0iI0M5QTg0QyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNlcmlmIj5NJmFtcDtNPC90ZXh0Pjwvc3ZnPg==">
+<!-- Favicon Ikon Kitab Emas -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBCM0QyRSIgcng9IjIwIi8+PHBhdGggZD0iTTMwIDI1IEw3MCAyNSBMNzAgNzUgTDMwIDc1IFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0M5QTg0QyIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTQwIDM1IEw2MCAzNSBNNDAgNDUgTDYwIDQ1IE00MCA1NSBMNTAgNTUiIHN0cm9rZT0iI0M5QTg0QyIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSI1MCIgeT0iOTAiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiNDOUE4NEMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC13ZWlnaHQ9ImJvbGQiPk0mYW1wO008L3RleHQ+PC9zdmc+">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBCM0QyRSIgcng9IjIwIi8+PHBhdGggZD0iTTMwIDI1IEw3MCAyNSBMNzAgNzUgTDMwIDc1IFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0M5QTg0QyIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTQwIDM1IEw2MCAzNSBNNDAgNDUgTDYwIDQ1IE00MCA1NSBMNTAgNTUiIHN0cm9rZT0iI0M5QTg0QyIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSI1MCIgeT0iOTAiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiNDOUE4NEMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC13ZWlnaHQ9ImJvbGQiPk0mYW1wO008L3RleHQ+PC9zdmc+">
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -385,10 +387,58 @@
   .toast-msg.show {
     bottom: 90px;
   }
+
+  /* ============================================================
+     TOMBOL INSTAL APLIKASI (PWA)
+     ============================================================ */
+  #install-app-btn {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #0B3D2E, #145A44);
+    border: 1px solid #C9A84C;
+    color: #F5F0E8;
+    padding: 12px 24px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 20px rgba(201, 168, 76, 0.4);
+    z-index: 10001;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  #install-app-btn.show {
+    top: 20px;
+  }
+
+  #install-app-btn:active {
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  #install-app-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: #C9A84C;
+  }
 </style>
 </head>
 
 <body class="geometric-bg text-[#F5F0E8]">
+
+<!-- TOMBOL INSTAL APLIKASI -->
+<button id="install-app-btn" onclick="installPWA()">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/>
+  </svg>
+  Instal Aplikasi
+</button>
 
 <div id="toast-msg" class="toast-msg">pencet sakali deui bisi arek kaluar mah</div>
 
@@ -962,8 +1012,11 @@
 
 <script>
   /* ============================================================
-     REGISTER SERVICE WORKER (PWA)
+     REGISTER SERVICE WORKER (PWA) & INSTALL PROMPT
      ============================================================ */
+  let deferredPrompt;
+  const installBtn = document.getElementById('install-app-btn');
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
@@ -975,6 +1028,44 @@
         });
     });
   }
+
+  // Menangkap event install dari browser
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Mencegah browser memunculkan banner install bawaan (jika ada)
+    e.preventDefault();
+    // Simpan event agar bisa dipicu nanti
+    deferredPrompt = e;
+    // Tampilkan tombol install kustom kita
+    installBtn.classList.add('show');
+  });
+
+  // Fungsi ketika tombol install diklik
+  function installPWA() {
+    if (!deferredPrompt) return;
+    
+    // Tampilkan prompt install browser
+    deferredPrompt.prompt();
+    
+    // Tunggu respon dari pengguna
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+        // Sembunyikan tombol setelah diinstal
+        installBtn.classList.remove('show');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      // Reset deferredPrompt
+      deferredPrompt = null;
+    });
+  }
+
+  // Sembunyikan tombol jika aplikasi sudah terinstal
+  window.addEventListener('appinstalled', () => {
+    installBtn.classList.remove('show');
+    console.log('PWA was installed');
+  });
+
 
   /* ============================================================
      0. FUNGSI HAPUS CACHE (Broom Icon)
