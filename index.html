@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Marhaban & Manaqib — Kitab Digital</title>
 
-<!-- PWA Meta Tags -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0B3D2E">
-<!-- Favicon Logo Kustom -->
 <link rel="icon" type="image/png" href="./logo.png">
 <link rel="apple-touch-icon" href="./logo.png">
 
@@ -388,7 +386,6 @@
     bottom: 90px;
   }
 
-  /* Tombol Instal PWA */
   #install-app-btn {
     position: fixed;
     top: -100px;
@@ -430,7 +427,6 @@
 
 <body class="geometric-bg text-[#F5F0E8]">
 
-<!-- Tombol Instal PWA -->
 <button id="install-app-btn" onclick="installPWA()">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/>
@@ -438,7 +434,7 @@
   Instal Aplikasi
 </button>
 
-<div id="toast-msg" class="toast-msg">pencet sakali deui bisi arek kaluar mah</div>
+<div id="toast-msg" class="toast-msg" data-default="pencet sakali deui bisi arek kaluar mah">pencet sakali deui bisi arek kaluar mah</div>
 
 <div id="light-trail-layer"></div>
 
@@ -1048,13 +1044,14 @@
   });
 
   /* ============================================================
-     CACHE CLEANER
+     CACHE CLEANER - Preserves User Edits
      ============================================================ */
   async function clearAppCache() {
-    if (confirm("Bersihkan cache aplikasi, teks editan, dan muat ulang halaman?")) {
+    if (confirm("Bersihkan cache browser dan muat ulang?\n\n✅ Teks yang sudah Anda edit TIDAK akan terhapus.\n❌ Hanya file cache website yang dibersihkan.")) {
       try {
-        localStorage.clear();
         sessionStorage.clear();
+        // NOTE: localStorage NOT cleared - preserves user edits
+
         if ('serviceWorker' in navigator) {
           const registrations = await navigator.serviceWorker.getRegistrations();
           for (let registration of registrations) {
@@ -1076,7 +1073,7 @@
   }
 
   /* ============================================================
-     FALLING LIGHTS
+     FALLING LIGHTS EFFECT
      ============================================================ */
   function createFallingLights(container, count = 45) {
     container.innerHTML = '';
@@ -1108,7 +1105,7 @@
   }
 
   /* ============================================================
-     NAVIGASI
+     NAVIGATION
      ============================================================ */
   const readerControls = document.getElementById('reader-controls');
 
@@ -1317,33 +1314,101 @@
   }
 
   /* ============================================================
-     EDIT TEXT
+     EDIT TEXT - REAL-TIME AUTO SAVE (ENHANCED)
      ============================================================ */
   let isEditMode = false;
+  let saveDebounceTimer;
+  let saveToastTimer;
+  
   const contentMarhaban = document.getElementById('content-marhaban');
   const contentManaqib = document.getElementById('content-manaqib');
   const btnEdit = document.getElementById('btn-edit');
   const iconPencil = document.getElementById('icon-pencil');
   const iconCheck = document.getElementById('icon-check');
+  const toastEl = document.getElementById('toast-msg');
 
   function loadEdits() {
-    const savedMarhaban = localStorage.getItem('edit_marhaban');
-    const savedManaqib = localStorage.getItem('edit_manaqib');
-    if (savedMarhaban) contentMarhaban.innerHTML = savedMarhaban;
-    if (savedManaqib) contentManaqib.innerHTML = savedManaqib;
+    try {
+      const savedMarhaban = localStorage.getItem('edit_marhaban');
+      const savedManaqib = localStorage.getItem('edit_manaqib');
+      if (savedMarhaban) contentMarhaban.innerHTML = savedMarhaban;
+      if (savedManaqib) contentManaqib.innerHTML = savedManaqib;
+      console.log("✓ Edits loaded from storage");
+    } catch (e) {
+      console.error("Load error:", e);
+    }
+  }
+
+  function showSaveToast(message) {
+    toastEl.innerText = message;
+    toastEl.classList.add('show');
+    clearTimeout(saveToastTimer);
+    saveToastTimer = setTimeout(() => {
+      toastEl.classList.remove('show');
+      setTimeout(() => { toastEl.innerText = toastEl.dataset.default; }, 300);
+    }, 1500);
   }
 
   function saveEdits() {
     if (!isEditMode) return;
-    localStorage.setItem('edit_marhaban', contentMarhaban.innerHTML);
-    localStorage.setItem('edit_manaqib', contentManaqib.innerHTML);
+    
+    // Show immediate visual feedback
+    showSaveToast("✓ Perubahan tersimpan otomatis...");
+    
+    // Debounce actual save (300ms after last keystroke)
+    clearTimeout(saveDebounceTimer);
+    saveDebounceTimer = setTimeout(() => {
+      try {
+        localStorage.setItem('edit_marhaban', contentMarhaban.innerHTML);
+        localStorage.setItem('edit_manaqib', contentManaqib.innerHTML);
+        localStorage.setItem('edit_last_saved', new Date().toISOString());
+        console.log("✓ Saved to localStorage at", new Date().toLocaleTimeString());
+      } catch (e) {
+        console.error("Save error:", e);
+        if (e.name === 'QuotaExceededError') {
+          showSaveToast("⚠️ Memori browser penuh! Teks terlalu panjang.");
+        } else {
+          showSaveToast("⚠️ Gagal menyimpan. Coba lagi.");
+        }
+      }
+    }, 300);
   }
 
+  // Force save without debounce (for page hide, beforeunload)
+  function forceSaveEdits() {
+    if (!isEditMode) return;
+    try {
+      localStorage.setItem('edit_marhaban', contentMarhaban.innerHTML);
+      localStorage.setItem('edit_manaqib', contentManaqib.innerHTML);
+      localStorage.setItem('edit_last_saved', new Date().toISOString());
+      console.log("✓ Force saved");
+    } catch (e) {
+      console.error("Force save error:", e);
+    }
+  }
+
+  // Multiple save triggers for maximum reliability
   contentMarhaban.addEventListener('input', saveEdits);
   contentManaqib.addEventListener('input', saveEdits);
+  contentMarhaban.addEventListener('blur', forceSaveEdits);
+  contentManaqib.addEventListener('blur', forceSaveEdits);
+
+  // Save when user switches app (mobile)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      forceSaveEdits();
+    }
+  });
+
+  // Save when page closes/refreshes
+  window.addEventListener('beforeunload', forceSaveEdits);
+  window.addEventListener('pagehide', forceSaveEdits);
 
   function toggleEditMode() {
     if (isEditMode) {
+      // Exit edit mode - force final save
+      forceSaveEdits();
+      
       isEditMode = false;
       btnEdit.classList.remove('active-edit');
       iconPencil.classList.remove('hidden');
@@ -1355,7 +1420,8 @@
       contentManaqib.classList.remove('edit-active-border');
       
       readerControls.classList.remove('show');
-      alert("Mode edit dimatikan. Perubahan telah disimpan.");
+      
+      showSaveToast("✓ Mode edit selesai. Semua perubahan tersimpan permanen.");
       return;
     }
 
@@ -1373,7 +1439,7 @@
       
       readerControls.classList.remove('show');
       
-      alert("Mode edit AKTIF. Silakan buka halaman Marhaban atau Manaqib, lalu ketuk teks untuk mengubahnya. Klik ikon centang (pensil) lagi jika sudah selesai.");
+      alert("Mode edit AKTIF.\n\n✅ Setiap perubahan tersimpan OTOMATIS secara real-time.\n✅ Perubahan tetap tersimpan meskipun aplikasi ditutup.\n✅ Perubahan hanya hilang jika Anda mengeditnya kembali.\n\nSilakan buka halaman Marhaban atau Manaqib, lalu ketuk teks untuk mengubahnya.\n\nKlik ikon ✓ (centang) di kiri bawah jika sudah selesai.");
     } else if (pwd !== null) {
       alert("Password salah! Anda tidak dapat mengedit.");
     }
@@ -1385,12 +1451,14 @@
   let exitPressedOnce = false;
   let exitTimeout;
 
-  function showToast(message) {
-    const toast = document.getElementById('toast-msg');
-    toast.innerText = message;
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
+  function showBackToast(message) {
+    toastEl.innerText = message;
+    toastEl.classList.add('show');
+    clearTimeout(exitTimeout);
+    exitTimeout = setTimeout(() => {
+      toastEl.classList.remove('show');
+      setTimeout(() => { toastEl.innerText = toastEl.dataset.default; }, 300);
+      exitPressedOnce = false;
     }, 2000);
   }
 
@@ -1409,14 +1477,9 @@
       }
       
       exitPressedOnce = true;
-      showToast("pencet sakali deui bisi arek kaluar mah");
+      showBackToast("pencet sakali deui bisi arek kaluar mah");
       
       history.pushState({ page: 'page-cover' }, '', window.location.href);
-      
-      clearTimeout(exitTimeout);
-      exitTimeout = setTimeout(() => {
-        exitPressedOnce = false;
-      }, 2000);
       
     } else {
       if (state && state.page) {
