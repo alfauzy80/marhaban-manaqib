@@ -388,6 +388,7 @@
     bottom: 90px;
   }
 
+  /* Tombol Instal PWA */
   #install-app-btn {
     position: fixed;
     top: -100px;
@@ -429,6 +430,7 @@
 
 <body class="geometric-bg text-[#F5F0E8]">
 
+<!-- Tombol Instal PWA -->
 <button id="install-app-btn" onclick="installPWA()">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/>
@@ -1008,7 +1010,7 @@
 
 <script>
   /* ============================================================
-     REGISTER SERVICE WORKER (PWA) & INSTALL PROMPT
+     PWA INSTALL LOGIC
      ============================================================ */
   let deferredPrompt;
   const installBtn = document.getElementById('install-app-btn');
@@ -1016,12 +1018,8 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
-        .then(registration => {
-          console.log('ServiceWorker registered with scope:', registration.scope);
-        })
-        .catch(error => {
-          console.log('ServiceWorker registration failed:', error);
-        });
+        .then(registration => console.log('SW registered'))
+        .catch(error => console.log('SW registration failed:', error));
     });
   }
 
@@ -1032,14 +1030,14 @@
   });
 
   function installPWA() {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      alert("Browser Anda belum mengizinkan instalasi otomatis saat ini. Silakan buka Menu Browser (titik tiga) > 'Tambahkan ke Layar Utama' / 'Instal Aplikasi'.");
+      return;
+    }
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
         installBtn.classList.remove('show');
-      } else {
-        console.log('User dismissed the install prompt');
       }
       deferredPrompt = null;
     });
@@ -1047,30 +1045,26 @@
 
   window.addEventListener('appinstalled', () => {
     installBtn.classList.remove('show');
-    console.log('PWA was installed');
   });
 
   /* ============================================================
-     0. FUNGSI HAPUS CACHE (Broom Icon)
+     CACHE CLEANER
      ============================================================ */
   async function clearAppCache() {
     if (confirm("Bersihkan cache aplikasi, teks editan, dan muat ulang halaman?")) {
       try {
         localStorage.clear();
         sessionStorage.clear();
-
         if ('serviceWorker' in navigator) {
           const registrations = await navigator.serviceWorker.getRegistrations();
           for (let registration of registrations) {
             await registration.unregister();
           }
         }
-
         if ('caches' in window) {
           const cacheNames = await caches.keys();
           await Promise.all(cacheNames.map(name => caches.delete(name)));
         }
-
         const url = new URL(window.location.href);
         url.searchParams.set('nocache', Date.now());
         window.location.replace(url.toString());
@@ -1082,7 +1076,7 @@
   }
 
   /* ============================================================
-     1. LOGIKA EFEK CAHAYA BERJATUHAN
+     FALLING LIGHTS
      ============================================================ */
   function createFallingLights(container, count = 45) {
     container.innerHTML = '';
@@ -1114,7 +1108,7 @@
   }
 
   /* ============================================================
-     2. LOGIKA NAVIGASI & PANEL KONTROL
+     NAVIGASI
      ============================================================ */
   const readerControls = document.getElementById('reader-controls');
 
@@ -1148,7 +1142,7 @@
   }
 
   /* ============================================================
-     3. FITUR UBAH UKURAN FONT (A- / A+)
+     FONT SIZER
      ============================================================ */
   let currentBaseSize = 1.25;
   if (window.innerWidth >= 640) currentBaseSize = 1.5;
@@ -1164,7 +1158,7 @@
   }
 
   /* ============================================================
-     4. FITUR AUDIO BACA (TEXT TO SPEECH) - PERBAIKAN MENYELURUH
+     AUDIO TTS
      ============================================================ */
   let isReading = false;
   let chunks = [];
@@ -1292,7 +1286,7 @@
   }
 
   /* ============================================================
-     5. FITUR SCROLL TO TOP & EFEK CAHAYA
+     SCROLL TO TOP
      ============================================================ */
   window.addEventListener('scroll', () => {
     const btn = document.getElementById('scroll-to-top');
@@ -1323,7 +1317,7 @@
   }
 
   /* ============================================================
-     6. FITUR EDIT TEKS (PENSIL)
+     EDIT TEXT
      ============================================================ */
   let isEditMode = false;
   const contentMarhaban = document.getElementById('content-marhaban');
@@ -1386,7 +1380,7 @@
   }
 
   /* ============================================================
-     7. LOGIKA TOMBOL BACK (HISTORY API) & TOAST
+     BACK BUTTON LOGIC
      ============================================================ */
   let exitPressedOnce = false;
   let exitTimeout;
