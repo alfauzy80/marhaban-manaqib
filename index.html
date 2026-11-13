@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Marhaban & Manaqib — Kitab Digital (Preview)</title>
+<title>Marhaban & Manaqib — Kitab Digital</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,10 +19,7 @@
   }
   * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
 
-  /* ============================================================
-     RESET RESPONSIF — anti-overflow horizontal
-     ============================================================ */
-  html {
+  html, body {
     height: 100%;
     width: 100%;
     max-width: 100%;
@@ -32,19 +29,14 @@
     -webkit-text-size-adjust: 100%;
   }
   body {
-    width: 100%;
-    max-width: 100vw;
     min-height: 100vh;
     min-height: 100dvh;
-    overflow-x: hidden;
-    overflow-x: clip;
     font-family: 'Inter', sans-serif;
   }
 
   .font-playfair { font-family: 'Playfair Display', serif; }
   .font-amiri    { font-family: 'Amiri', serif; }
 
-  /* Pola geometri */
   .geometric-bg {
     background-color: var(--emerald);
     background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23C9A84C' stroke-opacity='0.08' stroke-width='1'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M0 0 L80 80 M80 0 L0 80'/%3E%3Ccircle cx='40' cy='40' r='18'/%3E%3C/g%3E%3C/svg%3E");
@@ -64,26 +56,23 @@
     overflow: hidden;
     border-radius: 1rem;
     border: 1px solid rgba(201, 168, 76, 0.3);
-    background: rgba(11, 61, 46, 0.8);
+    background: rgba(11, 61, 46, 0.85);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     transition: all 0.3s ease;
   }
   .cover-card:hover {
     border-color: rgba(201, 168, 76, 0.7);
-    box-shadow: 0 0 40px rgba(201, 168, 76, 0.25);
-    transform: translateY(-4px);
+    box-shadow: 0 0 40px rgba(201, 168, 76, 0.15);
+    transform: translateY(-2px);
   }
 
-  /* ============================================================
-     HALAMAN — pakai dvh untuk mobile viewport
-     ============================================================ */
   .page {
     display: none;
     width: 100%;
     max-width: 100vw;
     min-height: 100vh;
-    min-height: 100dvh; /* dynamic viewport height — fix address bar mobile */
+    min-height: 100dvh;
   }
   .page.active {
     display: flex;
@@ -94,7 +83,6 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* Ornamen sudut */
   .corner {
     position: absolute;
     width: 64px; height: 64px;
@@ -113,11 +101,6 @@
   }
   .twinkle { animation: twinkle 3s ease-in-out infinite; }
 
-  /* ============================================================
-     ✨ EFEK CAHAYA BERJATUHAN — struktur 2 lapis agar aman
-     Lapis 1 (#lights-wrapper): mask fade (visual)
-     Lapis 2 (#falling-lights): overflow:hidden + clip-path (anti-scroll)
-     ============================================================ */
   #lights-wrapper {
     position: absolute;
     inset: 0;
@@ -127,16 +110,8 @@
     clip-path: inset(0);
     pointer-events: none;
     z-index: 1;
-    mask-image: linear-gradient(to bottom,
-      transparent 0%,
-      black 10%,
-      black 90%,
-      transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom,
-      transparent 0%,
-      black 10%,
-      black 90%,
-      transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
   }
 
   #falling-lights {
@@ -153,58 +128,24 @@
     position: absolute;
     top: -10px;
     border-radius: 50%;
-    background: radial-gradient(circle,
-      rgba(255, 245, 210, 1) 0%,
-      rgba(233, 212, 150, 0.9) 30%,
-      rgba(201, 168, 76, 0.5) 60%,
-      rgba(201, 168, 76, 0) 100%);
-    box-shadow:
-      0 0 6px rgba(233, 212, 150, 0.8),
-      0 0 12px rgba(201, 168, 76, 0.5),
-      0 0 20px rgba(201, 168, 76, 0.2);
-    animation: fallDown linear infinite,
-               twinkleSoft ease-in-out infinite;
+    background: radial-gradient(circle, rgba(255, 245, 210, 1) 0%, rgba(233, 212, 150, 0.9) 30%, rgba(201, 168, 76, 0.5) 60%, rgba(201, 168, 76, 0) 100%);
+    box-shadow: 0 0 6px rgba(233, 212, 150, 0.8), 0 0 12px rgba(201, 168, 76, 0.5), 0 0 20px rgba(201, 168, 76, 0.2);
+    animation: fallDown linear infinite, twinkleSoft ease-in-out infinite;
     will-change: transform, opacity;
   }
-
   .light-particle.bokeh {
-    background: radial-gradient(circle,
-      rgba(233, 212, 150, 0.5) 0%,
-      rgba(201, 168, 76, 0.25) 40%,
-      rgba(201, 168, 76, 0) 100%);
-    box-shadow:
-      0 0 20px rgba(201, 168, 76, 0.3),
-      0 0 40px rgba(201, 168, 76, 0.15);
+    background: radial-gradient(circle, rgba(233, 212, 150, 0.5) 0%, rgba(201, 168, 76, 0.25) 40%, rgba(201, 168, 76, 0) 100%);
+    box-shadow: 0 0 20px rgba(201, 168, 76, 0.3), 0 0 40px rgba(201, 168, 76, 0.15);
     filter: blur(1px);
   }
-
-  .light-particle.spark {
-    background: none;
-    box-shadow: none;
-    border-radius: 0;
-  }
+  .light-particle.spark { background: none; box-shadow: none; border-radius: 0; }
   .light-particle.spark::before {
-    content: '✦';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 240, 200, 0.9);
-    text-shadow:
-      0 0 6px rgba(233, 212, 150, 0.9),
-      0 0 12px rgba(201, 168, 76, 0.6);
+    content: '✦'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: rgba(255, 240, 200, 0.9); text-shadow: 0 0 6px rgba(233, 212, 150, 0.9), 0 0 12px rgba(201, 168, 76, 0.6);
   }
 
-  @keyframes fallDown {
-    0%   { transform: translate3d(0, -10px, 0); }
-    100% { transform: translate3d(var(--drift, 0px), 110vh, 0); }
-  }
-
-  @keyframes twinkleSoft {
-    0%, 100% { opacity: var(--min-opacity, 0.3); }
-    50%      { opacity: var(--max-opacity, 1); }
-  }
+  @keyframes fallDown { 0% { transform: translate3d(0, -10px, 0); } 100% { transform: translate3d(var(--drift, 0px), 110vh, 0); } }
+  @keyframes twinkleSoft { 0%, 100% { opacity: var(--min-opacity, 0.3); } 50% { opacity: var(--max-opacity, 1); } }
 
   @media (prefers-reduced-motion: reduce) {
     .light-particle { animation: none; opacity: 0.5; }
@@ -212,15 +153,11 @@
 
   .cover-content { position: relative; z-index: 3; }
 
-  /* Scrollbar */
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
   ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(201,168,76,0.6); }
 
-  /* ============================================================
-     MOBILE TWEAKS — ornamen lebih kecil, jarak lebih rapat
-     ============================================================ */
   @media (max-width: 640px) {
     .corner { width: 40px; height: 40px; }
     .corner.tl { top: 1rem; left: 1rem; }
@@ -228,55 +165,104 @@
     .corner.bl { bottom: 1rem; left: 1rem; }
     .corner.br { bottom: 1rem; right: 1rem; }
   }
+  
+  /* Styling khusus teks kitab */
+  .kitab-text p { margin-bottom: 0.5rem; }
+  
+  /* Base text size yang akan diubah oleh JS */
+  .reading-content {
+    font-size: 1.25rem; /* setara text-xl */
+    transition: font-size 0.2s ease;
+  }
+  @media (min-width: 640px) {
+    .reading-content { font-size: 1.5rem; } /* setara text-2xl di desktop */
+  }
+  .reading-content p { line-height: 2.2; }
+
+  /* ============================================================
+     FLOATING CONTROL BAR (Pengubah Font & Audio)
+     ============================================================ */
+  #reader-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(11, 61, 46, 0.95);
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201, 168, 76, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 12px;
+    z-index: 100;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  #reader-controls.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .ctrl-btn {
+    background: rgba(201, 168, 76, 0.1);
+    color: var(--gold);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+  
+  .ctrl-btn:hover { background: rgba(201, 168, 76, 0.3); transform: scale(1.05); }
+  .ctrl-btn:active { transform: scale(0.95); }
+  .ctrl-btn.play-btn { background: var(--gold); color: var(--emerald); border: none; width: 48px; height: 48px; font-size: 1.3rem; box-shadow: 0 0 15px rgba(201, 168, 76, 0.4); }
+  .ctrl-btn.play-btn:hover { background: #e0c368; }
+  
+  .ctrl-divider { width: 1px; height: 24px; background: rgba(201, 168, 76, 0.3); }
 </style>
 </head>
 
 <body class="geometric-bg text-[#F5F0E8]">
 
+<!-- ================= PANEL KONTROL MEMBACA ================= -->
+<div id="reader-controls">
+  <button class="ctrl-btn" onclick="changeFontSize(-0.15)" title="Perkecil Teks">A-</button>
+  <button class="ctrl-btn" onclick="changeFontSize(0.15)" title="Perbesar Teks">A+</button>
+  <div class="ctrl-divider"></div>
+  <button class="ctrl-btn play-btn" id="playBtn" onclick="toggleAudio()" title="Putar Suara">▶</button>
+</div>
+
 <!-- ================= HALAMAN 1: COVER ================= -->
 <section id="page-cover" class="page active relative overflow-hidden items-center justify-center px-4 sm:px-6 py-10 sm:py-20">
-
-  <!-- ✨ Lapisan cahaya berjatuhan (2 lapis untuk clipping aman) -->
-  <div id="lights-wrapper" aria-hidden="true">
-    <div id="falling-lights"></div>
-  </div>
-
-  <!-- Ornamen sudut -->
-  <div class="corner tl"></div>
-  <div class="corner tr"></div>
-  <div class="corner bl"></div>
-  <div class="corner br"></div>
-
+  <div id="lights-wrapper" aria-hidden="true"><div id="falling-lights"></div></div>
+  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
   <div class="cover-content text-center w-full max-w-2xl mx-auto">
-
     <div class="flex items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
       <span class="h-px w-12 sm:w-16" style="background: linear-gradient(to right, transparent, #C9A84C);"></span>
       <span class="text-[#C9A84C] text-xl sm:text-2xl twinkle">✦</span>
       <span class="h-px w-12 sm:w-16" style="background: linear-gradient(to left, transparent, #C9A84C);"></span>
     </div>
-
-    <p class="font-amiri text-[#C9A84C]/80 text-base sm:text-lg mb-3 sm:mb-4" dir="rtl">
-      بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-    </p>
-
-    <h1 class="font-playfair text-[2.75rem] sm:text-6xl md:text-7xl font-bold leading-tight mb-1 sm:mb-2 gold-text">
-      MARHABAN
-    </h1>
+    <p class="font-amiri text-[#C9A84C]/80 text-base sm:text-lg mb-3 sm:mb-4" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+    <h1 class="font-playfair text-[2.75rem] sm:text-6xl md:text-7xl font-bold leading-tight mb-1 sm:mb-2 gold-text">MARHABAN</h1>
     <p class="font-playfair text-2xl sm:text-3xl md:text-4xl text-[#F5F0E8]/90 italic mb-1">&amp;</p>
-    <h1 class="font-playfair text-[2.75rem] sm:text-6xl md:text-7xl font-bold leading-tight gold-text">
-      MANAQIB
-    </h1>
-
-    <p class="mt-4 sm:mt-6 text-[#F5F0E8]/60 text-[10px] sm:text-sm tracking-[0.25em] sm:tracking-[0.3em] uppercase">
-      Kitab Digital
-    </p>
-
+    <h1 class="font-playfair text-[2.75rem] sm:text-6xl md:text-7xl font-bold leading-tight gold-text">MANAQIB</h1>
+    <p class="mt-4 sm:mt-6 text-[#F5F0E8]/60 text-[10px] sm:text-sm tracking-[0.25em] sm:tracking-[0.3em] uppercase">Kitab Digital</p>
     <div class="flex items-center justify-center gap-3 my-7 sm:my-10">
-      <span class="h-px w-16 sm:w-20 bg-[#C9A84C]/40"></span>
-      <span class="w-2 h-2 rotate-45 border border-[#C9A84C]"></span>
-      <span class="h-px w-16 sm:w-20 bg-[#C9A84C]/40"></span>
+      <span class="h-px w-16 sm:w-20 bg-[#C9A84C]/40"></span><span class="w-2 h-2 rotate-45 border border-[#C9A84C]"></span><span class="h-px w-16 sm:w-20 bg-[#C9A84C]/40"></span>
     </div>
-
     <button onclick="goTo('page-daftar-isi')" class="cover-card w-full px-5 sm:px-8 py-4 sm:py-6 flex items-center justify-between group cursor-pointer text-left">
       <div class="flex items-center gap-3 sm:gap-5 min-w-0">
         <span class="text-[#C9A84C] text-xl sm:text-2xl font-amiri shrink-0">فهرس</span>
@@ -287,10 +273,7 @@
       </div>
       <span class="text-[#C9A84C] text-xl shrink-0 transition-transform group-hover:translate-x-1">→</span>
     </button>
-
-    <p class="mt-8 sm:mt-12 text-[#F5F0E8]/30 text-[10px] sm:text-xs tracking-widest">
-      ✦ DEDIKASI UNTUK PARA PECINTA RASULULLAH ✦
-    </p>
+    <p class="mt-8 sm:mt-12 text-[#F5F0E8]/30 text-[10px] sm:text-xs tracking-widest">✦ DEDIKASI UNTUK PARA PECINTA RASULULLAH ✦</p>
   </div>
 </section>
 
@@ -303,7 +286,6 @@
       <p class="font-amiri text-[#C9A84C]/60 text-base sm:text-lg" dir="rtl">فهرس المحتويات</p>
       <div class="mt-5 sm:mt-6 h-px w-24 mx-auto" style="background: linear-gradient(to right, transparent, #C9A84C, transparent);"></div>
     </div>
-
     <div class="space-y-4 sm:space-y-5">
       <button onclick="goTo('page-marhaban')" class="cover-card group p-5 sm:p-6 md:p-8 flex items-center gap-4 sm:gap-6 cursor-pointer w-full text-left">
         <span class="font-playfair text-2xl sm:text-3xl md:text-4xl text-[#C9A84C]/40 group-hover:text-[#C9A84C] transition-colors shrink-0">01</span>
@@ -316,7 +298,6 @@
         </div>
         <span class="text-[#C9A84C] text-lg sm:text-xl opacity-0 group-hover:opacity-100 transition-opacity shrink-0">→</span>
       </button>
-
       <button onclick="goTo('page-manaqib')" class="cover-card group p-5 sm:p-6 md:p-8 flex items-center gap-4 sm:gap-6 cursor-pointer w-full text-left">
         <span class="font-playfair text-2xl sm:text-3xl md:text-4xl text-[#C9A84C]/40 group-hover:text-[#C9A84C] transition-colors shrink-0">02</span>
         <div class="flex-1 min-w-0">
@@ -329,14 +310,13 @@
         <span class="text-[#C9A84C] text-lg sm:text-xl opacity-0 group-hover:opacity-100 transition-opacity shrink-0">→</span>
       </button>
     </div>
-
     <p class="text-center mt-12 sm:mt-16 text-[#F5F0E8]/20 text-[10px] sm:text-xs tracking-widest">✦ SEMOGA BERMANFAAT ✦</p>
   </div>
 </section>
 
 <!-- ================= HALAMAN 3: MARHABAN ================= -->
-<section id="page-marhaban" class="page flex-col px-4 sm:px-6 py-10 sm:py-16">
-  <div class="max-w-3xl mx-auto w-full">
+<section id="page-marhaban" class="page flex-col px-4 sm:px-6 py-10 sm:py-20">
+  <div class="max-w-3xl mx-auto w-full pb-20"> <!-- pb-20 agar tidak tertutup panel kontrol -->
     <button onclick="goTo('page-daftar-isi')" class="text-[#C9A84C]/60 text-sm hover:text-[#C9A84C] transition-colors inline-flex items-center gap-2 mb-6 sm:mb-10">← Kembali ke Daftar Isi</button>
 
     <div class="text-center mb-8 sm:mb-12">
@@ -345,16 +325,359 @@
       <p class="text-[#F5F0E8]/40 text-[10px] sm:text-sm mt-1.5 sm:mt-2 tracking-widest uppercase">Syair Pujian &amp; Penyambutan</p>
     </div>
 
-    <div class="cover-card p-6 sm:p-8 md:p-12">
-      <div class="text-center font-amiri text-xl sm:text-2xl md:text-3xl leading-loose text-[#F5F0E8]/90 mb-6 sm:mb-8" dir="rtl">
-        <p>مَرْحَبًا يَا نُوْرَ عَيْنِي</p>
-        <p>مَرْحَبًا يَا خَيْرَ خَلْقِ اللهِ</p>
+    <!-- KONTEN KITAB (Target pembaca) -->
+    <div class="cover-card p-5 sm:p-8 md:p-12 space-y-6" id="content-marhaban">
+      
+      <!-- Bagian Pembuka -->
+      <div class="text-right font-amiri reading-content text-[#F5F0E8]/90 kitab-text" dir="rtl">
+        <p class="text-[#C9A84C] font-bold text-center mb-4">الْجَنَّةُ وَنَعِيْمُهَا سَعْدٌ لِمَنْ يُصَلِّي وَيُسَلِّمُ وَيُبَارِك عَلَيْهِ</p>
+        <p class="text-center font-bold mb-6">اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ وَعَلَى آلِه</p>
+        
+        <p class="text-center text-[#C9A84C] mb-4">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</p>
+        <p>أَبْتِدِئُ الإِمْلَاءَ بِاسْمِ الذَّاتِ الْعَلِيَّةِ، مُسْتَدِرًّا فِي فَضْلِ الْبَرَكَاتِ عَلَى مَا أَنَالَهُ وَأَوْلَاهُ ۞ وَأَثْنِي بِحَمْدٍ مَوَارِدُهُ سَائِغَةٌ هَنِيَّةٌ ۞ مُمْتَلِئًا مِنَ الشُّكْرِ الْجَمِيلِ مَطَايَاهُ ۞ وَأَصَلِّي وَأُسَلِّمُ عَلَى النُّورِ الْمَوْصُوفِ بِالتَّقَدُّمِ وَالْأَوَّلِيَّةِ ۞ الْمُنْتَقِلِ فِي الْغُرَرِ الْكَرِيمَةِ وَالْجَبَاهِ ۞ وَأَسْتَمْنِحُ اللَّهَ تَعَالَى رِضْوَانًا يَخُصُّ الْعِتْرَةَ الطَّاهِرَةَ النَّبَوِيَّةَ ۞ وَيَعُمُّ الصَّحَابَةَ وَالْأَتْبَاعَ وَمَنْ وَالَاهُ ۞ وَأَسْتَجْدِيَهِ هِدَايَةً لِسُلُوكِ السُّبْلِ الْوَاضِحَةِ الْجَلِيَّةِ ۞ وَحِفْظًا مَنَّ الْغَوَايَةِ فِي حَظَاظِ الْخَطَأِ وَخَطَايَاهُ ۞ وَأَنْشُرُ مِنْ قِصَّةِ الْمَوْلِدِ النَّبَوِيِّ بُرُودًا حَسَانًا عَبِقَةً عَنْبَرِيَّةً ۞ نَاظِمًا مِنَ النَّسَبِ الشَّرِيفِ عِقْدًا تَحَلَّى الْمَسَامِعُ بِحَلَاهُ ۞ وَأَسْتَعِينُ بِحَوْلِ اللَّهِ تَعَالَى وَقُوَّتِهِ ۞ فَإِنَّهُ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ</p>
       </div>
-      <div class="pt-5 sm:pt-6 border-t border-[#C9A84C]/20">
-        <p class="text-center italic text-[#F5F0E8]/60 mb-2 sm:mb-3 text-sm sm:text-base">"Selamat datang, cahaya mataku —</p>
-        <p class="text-center italic text-[#F5F0E8]/60 text-sm sm:text-base">selamat datang, sebaik-baik makhluk Allah."</p>
-        <p class="text-center text-xs text-[#F5F0E8]/30 mt-5 sm:mt-6">[ Konten Marhaban lengkap akan ditambahkan di sini ]</p>
+
+      <div class="text-center text-[#C9A84C]/70 text-xs tracking-widest my-6">Bersama imam &amp; ma'mum</div>
+
+      <div class="text-right font-amiri reading-content text-[#F5F0E8]/90 kitab-text" dir="rtl">
+        <p>عَطَرَ اللَّهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ ۞</p>
+        <p>اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ.</p>
       </div>
+
+      <div class="text-right font-amiri reading-content text-[#F5F0E8]/90 kitab-text mt-6" dir="rtl">
+        <p class="text-center text-[#C9A84C] mb-4">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ ۞</p>
+        <p>وَلَمَّا تَمَّ مِنْ حَمْلِهِ ۞ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ شَهْرَانِ عَلَى مَشْهُورِ الْأَقْوَالِ الْمَرْوِيَّةِ ۞</p>
+        <p>تَوَفَّى بِالْمَدِينَةِ الْمُنَوَّرَةِ أَبُوهُ عَبْدُ اللهِ وَكَانَ قَدِ اجْتَازَ بِأَخْوَالِهِ بَنِي عَدِيٍّ مَنِ الطَّائِفَةِ النَّجَّارِيَّةِ ۞</p>
+        <p>وَمَكَثَ فِيهِمْ شَهْرًا سَقِيمًا يُعَانُونَ سَقَمَهُ وَشَكْوَاهُ ۞</p>
+        <p>وَلَمَّا تَمَّ مِنْ حَمْلِهِ. صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ عَلَى قَوْلِ الرَّاجِحِ تِسْعَةُ أَشْهُرٍ قَمَرِيَّةٍ ۞</p>
+        <p>وَآل لِلزَّمَانِ أَنْ يُنْجِلِي عَنْهُ صَلَاهُ ۞</p>
+        <p>حَضَرَ أُمَّهُ لَيْلَةَ مَوْلِدِهِ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ آمِنَةُ وَمَرْيَمُ فِي نَسْوَةٍ مَنِ الْخَطِيرَةِ الْقُدْسِيَّةِ ۞ وَأَخَذَهَا الْمَخَاضُ فَوَلَدَتْهُ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ نُورًا يَتَلَأْلَأُ سَنَاهُ ۞</p>
+      </div>
+
+      <div class="text-center text-[#C9A84C]/70 text-xs tracking-widest my-6">Bersama imam &amp; ma'mum</div>
+
+      <div class="text-right font-amiri reading-content text-[#F5F0E8]/90 kitab-text" dir="rtl">
+        <p>عَطَرَ اللَّهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ ۞</p>
+        <p>اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ.</p>
+      </div>
+
+      <!-- Bagian Syair Marhaban (Imam & Ma'mum) -->
+      <div class="space-y-6 mt-8">
+        
+        <!-- Bait 1 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَانُورَ الْعَيْنِ مَرْحَبًا ۞ مَرْحَبًا يَامَرْحَبًا</p>
+            <p>مَرْحَبًا جَدَّ الْحُسَيْنِ مَرْحَبًا ۞ مَرْحَبًا يَامَرْحَبًا</p>
+          </div>
+        </div>
+        
+        <!-- Bait 2 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>طَلَعَ الْبَدْرُ عَلَيْنَا مَرْحَبًا ۞ مَرْحَبًا يَامَرْحَبًا</p>
+            <p>مَنْ ثَنِيَّةِ الْوَدَاعِ مَرْحَبًا ۞ مَرْحَبًا يَامَرْحَبًا</p>
+          </div>
+        </div>
+
+        <!-- Bait 3 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>يَاهَوْ وَجَبَ الشُّكْرُ عَلَيْنَا مَرْحَبًا يَاهَوْ مَرْحَبًا يَاهَوْ مَرْحَبًا يَا يَاهَوْ مَرْحَبًا ۞</p>
+            <p>يَاهَوْ مَادَعَا لِلَّهِ دَاع مَرْحَبًا يَاهَوْ مَرْحَبًا يَاهَوْ مَرْحَبًا يَا يَاهَوْ مَرْحَبًا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 4 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>يَاهَوْ مَرْحَبًا يَا نُورَ الْعَيْنِ مَرْحَبًا يَاهَوْ مَرْحَبًا يَا هَوْ مَرْحَبًا يَا يَا هَوْ مَرْحَبًا ۞</p>
+            <p>يَا هَوْ مَرْحَبًا جَدَّ الْحُسَيْنِ مَرْحَبًا يَا هَوْ مَرْحَبًا يَا هَوْ مَرْحَبًا يَا يَا هَوْ مَرْحَبًا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 5 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>أَيُّهَا الْمَبْعُوثُ فِينَا مَرْحَبًا ۞ أَيُّهَا الْمَبْعُوثُ فِينَا مَرْحَبًا</p>
+            <p>جِئْتَ بِالْأَمْرِ الْمُطَاعِ مَرْحَبًا ۞ أَيُّ جِئْتَ بِالْأَمْرِ الْمُطَاعِ مَرْحَبًا</p>
+          </div>
+        </div>
+
+        <!-- Bait 6 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَا نُورَ الْعَيْنِ مَرْحَبًا ۞ مَرْحَبًا يَا نُورَ الْعَيْنِ مَرْحَبًا ۞</p>
+            <p>مَرْحَبًا جَدَّ الْحُسَيْنِ مَرْحَبًا ۞ أَيُّ مَرْحَبًا جَدَّ الْحُسَيْنِ مَرْحَبًا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 7 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>كُنْ كُنْ شَفِيعًا يَاحَبِيبِي ۞ مَرْ مَرْحَبًا يَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 8 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْ مَرْحَبًا يَا .... ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 9 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>كُنْ كُنْ شَفِيعًا يَاحَبِيبِي ۞ مَرْ مَرْحَبًا يَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 10 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْ مَرْحَبًا يَا .... ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 11 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>يَوْمَ حَشْرٍ يَوْمَ حَشْرٍ وَاجْتَمَاعِ يَاهَوْ ۞ يَوْمَ حَشْرٍ يَوْمَ حَشْرٍ وَاجْتَمَاعِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 12 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْ مَرْحَبًا يَانُورَ الْعَيْنِ ۞ مَرْ مَرْحَبًا يَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 13 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْ مَرْحَبًا يَا .... ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 14 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْ مَرْحَبًا يَانُورَ الْعَيْنِ ۞ مَرْ مَرْحَبًا يَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 15 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْ مَرْحَبًا يَا .... ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 16 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَامَرْحَبًا جَدَّ الْحُسَيْنِ يَاهَوْ ۞ مَرْحَبًا يَا مَرْحَبًا جَدَّ الْحُسَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 17 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>رَبَّنَا صَلِّ عَلَى مَنْ ۞ مَرْحَبًا يَا مَرْحَبًا يَا ۞</p>
+            <p>حَلَّ فِي الْخَيْرِ الْبَقَاعِ ۞ مَرْحَبًا يَا مَرْحَبًا يَا مَرْحَبًا يَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 18 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَانُورَ الْعَيْنِ ۞ مَرْحَبًا يَا مَرْحَبًا يَا مَرْحَبًا يَا ۞</p>
+            <p>مَرْحَبًا جَدَّ الْحُسَيْنِ ۞ مَرْحَبًا يَا مَرْحَبًا يَا مَرْحَبًا يَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 19 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>يَاهَوْ فَاسْبَلِ السَّتْ ۞ فَاسْبَلِ السَّتْرَا عَلَيْنَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 20 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>فَاسْبَلِ السَّتْرَا عَلَيْنَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 21 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>يَا هَوْ فَاسْبَلِ السَّتْ ۞ فَاسْبَلِ السَّتْرَا عَلَيْنَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 22 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>فَاسْبَلِ السَّتْرَا عَلَيْنَا ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 23 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>اللهُ يَاهُوْ يَاهُوْ يَامُجِيبًا ۞ يَا مُجِيبًا كُلَّ كُلِّ دَاعِي ۞</p>
+            <p>اللهُ يَاهُوْ يَاهُوْ يَامُجِيبًا ۞ يَامُجِيبًا كُلَّ كُلِّ دَاعِي ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 24 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>يَاهُوْ مَرْحَبًا يَا ۞ مَرْحَبًا يَانُورَ يَانُورَ الْعَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 25 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَانُورَ يَانُورَ الْعَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 26 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>يَاهُوْ مَرْحَبًا يَا ۞ مَرْحَبًا يَانُورَ يَانُورَ الْعَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 27 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَا نُورَ يَانُورَ الْعَيْنِ ۞ اللهُ يَا هُوْ يَا هُوْ مَرْحَبًا يَا مَرْحَبًا جَدَّالْ ۞ جَدَّا الْحُسَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 28 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>اللهُ يَا هُوْ يَا هُوْ يَا مَرْحَبًا يَا مَرْحَبًا جَدَّالْ ۞ جَدَّا الْحُسَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 29 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>أَنْتَ فِي كُلِّ جَمِيلٍ ۞ وَجَمَالُ يَامُطَاعُ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 30 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَانُورَ الْعَيْنِ ۞ مَرْحَبًا جَدَّا الْحُسَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 31 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>قَدْ تَجَلَّيْتَ لِقَلْبِي ۞ مُسْفِرًا دُوْنَ الْقِنَاعِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 32 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَانُورَ الْعَيْنِ ۞ مَرْحَبًا جَدَّا الْحُسَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 33 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>وَلَبِسْ ثَوْبَ عِزّ ۞ بَعْدَ تَلْصِقِ الرَّقَاعِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 34 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَانُورَ الْعَيْنِ ۞ مَرْحَبًا جَدَّا الْحُسَيْنِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 35 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded mb-2">Imam</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>وَرَضَعَ ثَدْيَ وَصْلِ ۞ قَبْلَ ايَّامِ الرِّضَاعِ ۞</p>
+          </div>
+        </div>
+
+        <!-- Bait 36 -->
+        <div>
+          <span class="inline-block text-[10px] text-[#F5F0E8]/70 bg-[#F5F0E8]/10 px-2 py-0.5 rounded mb-2">Ma'mum</span>
+          <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+            <p>مَرْحَبًا يَانُورَ الْعَيْنِ ۞ مَرْحَبًا جَدَّا الْحُسَيْنِ ۞</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bagian Penutup (Sholawat) -->
+      <div class="space-y-6 mt-10 pt-8 border-t border-[#C9A84C]/20">
+        <div class="text-center text-[#C9A84C]/70 text-xs tracking-widest mb-4">Imam</div>
+        <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+          <p>وَصَلَاةُ اللهِ دَوَامًا ۞ لِلنَّبِيِّ شَمْسِ الْبَقَاعِ ۞</p>
+          <p>وَكَذَا آلٌ وَصَحْبٌ ۞ مَاسَعَى لِلَّهِ سَاعِ ۞</p>
+        </div>
+        
+        <div class="text-center text-[#F5F0E8]/70 text-xs tracking-widest mt-6 mb-4">Ma'mum</div>
+        <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
+          <p>صَلَّى اللهُ عَلَى مُحَمَّدٍ ۞ صَلَّى اللهُ عَلَيْهِ وَسَلَّمْ ۞</p>
+          <p>صَلَّى اللهُ عَلَى مُحَمَّدٍ ۞ صَلَّى اللهُ عَلَيْهِ وَسَلَّمْ ۞</p>
+        </div>
+      </div>
+
     </div>
 
     <p class="text-center mt-12 sm:mt-16 text-[#F5F0E8]/20 text-[10px] sm:text-xs tracking-widest">✦ ✦ ✦</p>
@@ -362,18 +685,16 @@
 </section>
 
 <!-- ================= HALAMAN 4: MANAQIB ================= -->
-<section id="page-manaqib" class="page flex-col px-4 sm:px-6 py-10 sm:py-16">
-  <div class="max-w-3xl mx-auto w-full">
+<section id="page-manaqib" class="page flex-col px-4 sm:px-6 py-10 sm:py-20">
+  <div class="max-w-3xl mx-auto w-full pb-20">
     <button onclick="goTo('page-daftar-isi')" class="text-[#C9A84C]/60 text-sm hover:text-[#C9A84C] transition-colors inline-flex items-center gap-2 mb-6 sm:mb-10">← Kembali ke Daftar Isi</button>
-
     <div class="text-center mb-8 sm:mb-12">
       <span class="font-amiri text-[#C9A84C]/50 text-2xl sm:text-3xl block mb-1 sm:mb-2" dir="rtl">مناقب</span>
       <h1 class="font-playfair text-3xl sm:text-4xl md:text-5xl font-bold gold-text">Manaqib</h1>
       <p class="text-[#F5F0E8]/40 text-[10px] sm:text-sm mt-1.5 sm:mt-2 tracking-widest uppercase">Kisah Keutamaan &amp; Teladan</p>
     </div>
-
-    <div class="cover-card p-6 sm:p-8 md:p-12 space-y-5 sm:space-y-6">
-      <div class="text-right font-amiri text-lg sm:text-xl md:text-2xl leading-loose text-[#F5F0E8]/90" dir="rtl">
+    <div class="cover-card p-6 sm:p-8 md:p-12 space-y-5 sm:space-y-6" id="content-manaqib">
+      <div class="text-right font-amiri reading-content text-[#F5F0E8]/90" dir="rtl">
         <p>قَالَ النَّبِيُّ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ...</p>
       </div>
       <div class="pt-4 border-t border-[#C9A84C]/20">
@@ -383,78 +704,157 @@
         <p class="text-center text-xs text-[#F5F0E8]/30 mt-5 sm:mt-6">[ Konten Manaqib lengkap akan ditambahkan di sini ]</p>
       </div>
     </div>
-
     <p class="text-center mt-12 sm:mt-16 text-[#F5F0E8]/20 text-[10px] sm:text-xs tracking-widest">✦ ✦ ✦</p>
   </div>
 </section>
 
 <script>
   /* ============================================================
-     Generator Partikel Cahaya Berjatuhan
+     1. LOGIKA EFEK CAHAYA BERJATUHAN
      ============================================================ */
   function createFallingLights(container, count = 45) {
     container.innerHTML = '';
     for (let i = 0; i < count; i++) {
       const p = document.createElement('span');
       p.className = 'light-particle';
-
       const rand = Math.random();
-      if (rand > 0.75) {
-        p.classList.add('bokeh');
-      } else if (rand > 0.55) {
-        p.classList.add('spark');
-      }
-
-      let size;
-      if (p.classList.contains('spark')) {
-        size = 8 + Math.random() * 8;
-      } else if (p.classList.contains('bokeh')) {
-        size = 10 + Math.random() * 14;
-      } else {
-        size = 2 + Math.random() * 4;
-      }
-      p.style.width  = size + 'px';
+      if (rand > 0.75) { p.classList.add('bokeh'); }
+      else if (rand > 0.55) { p.classList.add('spark'); }
+      let size = p.classList.contains('spark') ? 8 + Math.random() * 8 : (p.classList.contains('bokeh') ? 10 + Math.random() * 14 : 2 + Math.random() * 4);
+      p.style.width = size + 'px';
       p.style.height = size + 'px';
-
-      // ✅ Batasi left agar partikel tidak mendorong tepi kanan
-      //    (0–92% memberi sisa ruang untuk lebar partikel)
       p.style.left = (Math.random() * 92) + '%';
-
       const duration = 10 + Math.random() * 12;
       p.style.animationDuration = `${duration}s, ${2 + Math.random() * 2.5}s`;
       p.style.animationDelay = `${-Math.random() * duration}s, ${-Math.random() * 3}s`;
-
-      const drift = (Math.random() - 0.5) * 120;
-      p.style.setProperty('--drift', drift + 'px');
-
+      p.style.setProperty('--drift', ((Math.random() - 0.5) * 120) + 'px');
       p.style.setProperty('--min-opacity', (0.15 + Math.random() * 0.2).toFixed(2));
       p.style.setProperty('--max-opacity', (0.6 + Math.random() * 0.4).toFixed(2));
-
       container.appendChild(p);
     }
   }
 
   const lightLayer = document.getElementById('falling-lights');
   const lightsWrapper = document.getElementById('lights-wrapper');
-
   if (lightLayer) {
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
     createFallingLights(lightLayer, isMobile ? 25 : 50);
   }
 
-  /* Navigasi */
+  /* ============================================================
+     2. LOGIKA NAVIGASI & PANEL KONTROL
+     ============================================================ */
+  const readerControls = document.getElementById('reader-controls');
+
   function goTo(pageId) {
+    // Hentikan audio jika sedang berputar saat pindah halaman
+    if (window.speechSynthesis && window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      document.getElementById('playBtn').innerHTML = '▶';
+    }
+
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const target = document.getElementById(pageId);
     if (target) {
       target.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // Sembunyikan/Tampilkan efek cahaya
+      if (lightsWrapper) { lightsWrapper.style.display = (pageId === 'page-cover') ? 'block' : 'none'; }
 
-      if (lightsWrapper) {
-        lightsWrapper.style.display = (pageId === 'page-cover') ? 'block' : 'none';
+      // Tampilkan panel kontrol HANYA di halaman bab
+      if (pageId === 'page-marhaban' || pageId === 'page-manaqib') {
+        readerControls.classList.add('show');
+      } else {
+        readerControls.classList.remove('show');
       }
     }
   }
+
+  /* ============================================================
+     3. FITUR UBAH UKURAN FONT (A- / A+)
+     ============================================================ */
+  let currentBaseSize = 1.25; // default 1.25rem (text-xl)
+  if (window.innerWidth >= 640) currentBaseSize = 1.5; // default 1.5rem di desktop
+
+  function changeFontSize(delta) {
+    currentBaseSize += delta;
+    // Batasi ukuran minimal dan maksimal
+    if (currentBaseSize < 0.9) currentBaseSize = 0.9;
+    if (currentBaseSize > 2.5) currentBaseSize = 2.5;
+
+    // Terapkan ke semua class reading-content
+    document.querySelectorAll('.reading-content').forEach(el => {
+      el.style.fontSize = currentBaseSize + 'rem';
+    });
+  }
+
+  /* ============================================================
+     4. FITUR AUDIO BACA (TEXT TO SPEECH)
+     ============================================================ */
+  let isReading = false;
+  const playBtn = document.getElementById('playBtn');
+  const synth = window.speechSynthesis;
+
+  function toggleAudio() {
+    if (!('speechSynthesis' in window)) {
+      alert("Maaf, browser Anda tidak mendukung fitur suara ini.");
+      return;
+    }
+
+    if (isReading) {
+      // Hentikan suara
+      synth.cancel();
+      isReading = false;
+      playBtn.innerHTML = '▶';
+      return;
+    }
+
+    // Ambil teks dari halaman yang sedang aktif
+    let activeContent = null;
+    if (document.getElementById('page-marhaban').classList.contains('active')) {
+      activeContent = document.getElementById('content-marhaban');
+    } else if (document.getElementById('page-manaqib').classList.contains('active')) {
+      activeContent = document.getElementById('content-manaqib');
+    }
+
+    if (!activeContent) return;
+
+    // Ambil teks (tanpa tag HTML), bersihkan
+    let textToRead = activeContent.innerText || activeContent.textContent;
+    
+    // Buat objek utterance
+    const utterance = new SpeechSynthesisUtterance(textToRead);
+    utterance.lang = 'ar-SA'; // Set bahasa Arab
+    utterance.rate = 0.9; // Sedikit lebih lambat agar jelas
+    
+    // Coba cari suara laki-laki Arab (opsional, bergantung OS)
+    const voices = synth.getVoices();
+    const arabicVoice = voices.find(v => v.lang.includes('ar'));
+    if (arabicVoice) {
+      utterance.voice = arabicVoice;
+    }
+
+    utterance.onend = function() {
+      isReading = false;
+      playBtn.innerHTML = '▶';
+    };
+
+    utterance.onerror = function() {
+      isReading = false;
+      playBtn.innerHTML = '▶';
+    };
+
+    // Mulai baca
+    synth.speak(utterance);
+    isReading = true;
+    playBtn.innerHTML = '⏸'; // Ubah ikon jadi pause
+  }
+
+  // Pre-load voices (beberapa browser butuh ini)
+  window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+  };
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && lightsWrapper) {
     lightsWrapper.style.display = 'none';
